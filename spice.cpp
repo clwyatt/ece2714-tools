@@ -3,9 +3,9 @@
 #include <iostream>
 #include <fstream>
 
-SpiceSignal read_spice_file(const std::string &fname){
+IrregularSignal read_spice_file(const std::string &fname){
 
-  SpiceSignal s;
+  IrregularSignal s;
   
   std::ifstream ifs(fname);
 
@@ -16,11 +16,11 @@ SpiceSignal read_spice_file(const std::string &fname){
     std::getline(ifs, line);
     
     while(!ifs.eof() && ifs.good()){
-      Sample sample;
+      IrregularSignal::Sample sample;
       ifs >> sample.time >> sample.value;
 
       if(ifs.good()){
-	s.push_back(sample);
+	s.push_back(sample.time, sample.value);
       }
     }
   }
@@ -28,7 +28,7 @@ SpiceSignal read_spice_file(const std::string &fname){
   return s;
 }
 
-bool write_spice_file(const std::string &fname, const SpiceSignal& sig){
+bool write_spice_file(const std::string &fname, const IrregularSignal& sig){
 
   std::ofstream ofs(fname);
 

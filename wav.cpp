@@ -61,7 +61,7 @@ void fill_header(WAV & sound, unsigned int rate)
   sound.BlockAlign = sound.NumChannels*sound.BitsPerSample/8;
 }
 
-bool write_wav(Signal & sound, const std::string &filename)
+bool write_wav(RegularSignal & sound, const std::string &filename)
 { 
   std::ofstream outfile(filename.c_str(), std::ios::binary);
 
@@ -99,7 +99,7 @@ bool write_wav(Signal & sound, const std::string &filename)
   return true;
 }
 
-bool read_wav(Signal & sound, const std::string &filename)
+bool read_wav(RegularSignal & sound, const std::string &filename)
 {
   std::ifstream infile(filename.c_str(), std::ios::binary);
   if(!infile){

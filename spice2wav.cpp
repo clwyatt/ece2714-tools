@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[])
 {
-  SpiceSignal input = read_spice_file(std::string(argv[1]));
+  IrregularSignal input = read_spice_file(std::string(argv[1]));
     
   if( input.size() == 0 ){
     std::cerr << "Error: Bad input.\n";
@@ -32,10 +32,10 @@ int main(int argc, char *argv[])
   std::cout << "Using Time Step: " << dt << "\n";
   
   // get time point of last sample
-  double endTime = input.back().time;
+  double endTime = input[input.size() -1].time;
 
   // generate regularly sampled signal
-  Signal sampled(rate);
+  RegularSignal sampled(rate);
   double t = 0;
   std::size_t nearidx = 0;
   while(t < endTime){

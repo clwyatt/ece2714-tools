@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[])
 {
-  Signal input;
+  RegularSignal input;
   
   if( read_wav(input, std::string(argv[1])) ){
 
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     }
     std::cout << "Max value = " << max << "\n";
     
-    SpiceSignal output;
+    IrregularSignal output;
     
     double dt = 1./input.getSampleRate();
 
@@ -26,10 +26,7 @@ int main(int argc, char *argv[])
     
     double t = 0.;
     for(int i = 0; i < input.size(); ++i){
-      Sample s;
-      s.time = t;
-      s.value = input[i]/max;
-      output.push_back(s);
+      output.push_back(t, input[i]/max);
       t += dt;
     }
     write_spice_file(std::string(argv[2]), output);

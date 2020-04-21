@@ -4,7 +4,7 @@
 #include <limits>
 #include <iostream>
 
-void Signal::normalize(){
+void RegularSignal::normalize(){
 
   double max = std::numeric_limits<double>::min();
 
@@ -23,23 +23,42 @@ void Signal::normalize(){
   }
 }
 
-unsigned int Signal::getSampleRate(){
+unsigned int RegularSignal::getSampleRate() const{
   return rate;
 }
 
-void Signal::setSampleRate(unsigned int theRate){
+void RegularSignal::setSampleRate(unsigned int theRate){
   rate = theRate;
 }
 
-void Signal::push_back(double value){
+void RegularSignal::push_back(double value){
   data.push_back(value);
 }
 
 
-std::size_t Signal::size(){
+std::size_t RegularSignal::size() const{
   return data.size();
 }
 
-double Signal::operator[](std::size_t index){
+double RegularSignal::operator[](std::size_t index) const{
+  return data[index];
+}
+
+void IrregularSignal::push_back(double time, double value){
+
+  IrregularSignal::Sample s;
+  s.time = time;
+  s.value = value;
+  
+  data.push_back(s);
+}
+    
+
+std::size_t IrregularSignal::size() const{
+  return data.size();
+}
+
+
+IrregularSignal::Sample IrregularSignal::operator[](std::size_t index) const{
   return data[index];
 }

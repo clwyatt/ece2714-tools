@@ -12,8 +12,8 @@
  * \param sound the signal to write.
  * \param filename the filename to write to.
  */
-bool write_wav(Signal & sound, const std::string &filename);
+bool write_wav(RegularSignal & sound, const std::string &filename);
 
-bool read_wav(Signal & sound, const std::string &filename);
+bool read_wav(RegularSignal & sound, const std::string &filename);
 
 #endif
