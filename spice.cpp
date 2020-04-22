@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 
 IrregularSignal read_spice_file(const std::string &fname){
 
@@ -32,10 +33,11 @@ bool write_spice_file(const std::string &fname, const IrregularSignal& sig){
 
   std::ofstream ofs(fname);
 
+  ofs << std::setprecision(10);
+    
   bool ok = ofs.good();
   
   if(ok){
-    //ofs << "time   V\n";
     for(std::size_t i = 0; i < sig.size(); ++i){
       ofs << sig[i].time << "," << sig[i].value << ",";
     }

@@ -12,3 +12,4 @@ spice2wav.cpp
 spice.hpp spice.cpp
 wav.hpp wav.cpp
 signal.hpp signal.cpp)
+

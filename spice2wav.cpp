@@ -6,12 +6,48 @@
 #include "signal.hpp"
 #include "spice.hpp"
 
+void usage(){
+  std::cout << "spice2wav [-rate R] input.wav output.pwl\n";
+}
+
 int main(int argc, char *argv[])
 {
-  IrregularSignal input = read_spice_file(std::string(argv[1]));
+  std::string inputfile;
+  std::string outputfile;
+  unsigned int rate = 1000;
+  
+  // parse arguments
+  if((argc != 3) && (argc != 5)){
+    std::cerr << "Error: incorrect number of arguments\n";
+    usage();
+    return EXIT_FAILURE;
+  }
+
+  int argn = 1;
+  if(argc == 5){
+    if(std::string(argv[argn]) != "-rate"){
+      std::cerr << "Error: invalid option " << argv[argn] << "\n";
+      usage();
+      return EXIT_FAILURE;
+    }
+    argn++;
+    char * end; // TODO: replace with std::stoi
+    rate = strtol(argv[argn], &end, 10);
+    if(rate <= 0){
+      std::cerr << "Error: invalid rate " << rate << "\n";
+      return EXIT_FAILURE;
+    }
+    argn++;
+  }
+
+  inputfile = argv[argn];
+  outputfile = argv[argn+1];
+
+  // convert the file
+  IrregularSignal input = read_spice_file(inputfile);
     
   if( input.size() == 0 ){
-    std::cerr << "Error: Bad input.\n";
+    std::cerr << "Error: Bad input file.\n";
     return EXIT_FAILURE;
   }
 
@@ -21,15 +57,8 @@ int main(int argc, char *argv[])
     if(value > absmax) absmax = value;
   }
 
-  std::cout << "Abs Max = " << absmax << "\n";
-
   double scale = 4096/absmax;
-    
-  char * end;
-  unsigned int rate = strtol(argv[2], &end, 10);
   double dt = 1.0/rate;
-
-  std::cout << "Using Time Step: " << dt << "\n";
   
   // get time point of last sample
   double endTime = input[input.size() -1].time;
@@ -54,12 +83,6 @@ int main(int argc, char *argv[])
       double xj = input[j].value;
 
       double value = xj + (xi-xj)*(t-tj)/(ti-tj);
-
-      // std::cout << "Time " << t << " ";
-      // std::cout << "ti[" << i << "] = " << ti << " ";
-      // std::cout << "xi[" << i << "] = " << xi << " ";
-      // std::cout << "tj[" << j << "] = " << tj << " ";
-      // std::cout << "xj[" << j << "] = " << xj << "\n";
       
       sampled.push_back(scale*value);
     }
@@ -71,7 +94,7 @@ int main(int argc, char *argv[])
   }
   
   // save output wav file
-  write_wav(sampled, std::string(argv[3]));
+  write_wav(sampled, outputfile);
   
   return EXIT_SUCCESS;
 }
