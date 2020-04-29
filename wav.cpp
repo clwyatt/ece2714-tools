@@ -88,7 +88,7 @@ bool write_wav(RegularSignal & sound, const std::string &filename)
   outfile.write((char *)&header.Subchunk2Size, sizeof(header.Subchunk2Size));
 
   // write the data
-  std::cout << "Writing " << header.Subchunk2Size << " sound bytes." << std::endl;
+  //std::cout << "Writing " << header.Subchunk2Size << " sound bytes." << std::endl;
 
   for(std::size_t i = 0; i < sound.size(); ++i){
     double sample = sound[i];
@@ -166,7 +166,7 @@ bool read_wav(RegularSignal & sound, const std::string &filename)
   infile.read((char *)&header.Subchunk2Size, sizeof(header.Subchunk2Size));
 
   // read the data
-  std::cout << "Reading " << header.Subchunk2Size << " sound bytes." << std::endl;
+  //std::cout << "Reading " << header.Subchunk2Size << " sound bytes." << std::endl;
 
   for(intmax_t i = 0; i < header.Subchunk2Size; i+= 2){
     int16_t temp;
